@@ -15,4 +15,4 @@
    - `scen_1601-1900.csv`
    - `scen_1901-2236.csv`
 6. Run `data_load.py`. This will read the source CSVs and `nss.csv` file and generate `df_merged_train_test.pickle`, again in the `data-x-li-data` directory.
-7. Run `lightgbm.py` which reads the `df_merged_train_test.pickle` file and prints `low_MAPE`, `best_params` and `best_fit_no` (see the bottom of the file). And this takes a looong time.
+7. Run `lightgbm_exec.py` which reads the `df_merged_train_test.pickle` file and prints `low_MAPE`, `best_params` and `best_fit_no` (see the bottom of the file). And this takes a looong time.
