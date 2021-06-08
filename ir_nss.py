@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 # pip install nelson_siegel_svensson
 
 
-df_all = pd.read_csv('inputs_IR.csv')  
+df_all = pd.read_csv('inputs_ir.csv')  
 df_all.head()
 ir_sc = list(df_all["SC_NUM"].unique())
 # this doesn't change
@@ -35,4 +35,4 @@ for i in range(len(ir_sc)):
 
 print(df_ns)
 
-df_ns.to_csv('nss.csv')
+df_ns.to_csv('../data-x-li-data/nss.csv')

@@ -11,7 +11,7 @@ import pickle
 
 #Load the file containing variables [X_train, y_train, X_test, y_test]
 import pickle
-with open(r"df_merged_train_test.pickle", "rb") as input_file:
+with open(r"../data-x-li-data/df_merged_train_test.pickle", "rb") as input_file:
     X_train, y_train, X_test, y_test = pickle.load(input_file)
 
 
