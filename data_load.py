@@ -12,7 +12,7 @@ import pickle #load data in binary format
 
 
 #load ir 
-df_ir = pd.read_csv('nss.csv')
+df_ir = pd.read_csv('../data-x-li-data/nss.csv')
 # set #sc number as index 
 df_ir  = df_ir.set_index('scnum')
 df_ir.head()
@@ -21,13 +21,13 @@ df_ir.drop('Unnamed: 0', axis = 1, inplace = True)
 
 # load all files
 df1 = pd.read_csv('../data-x-li-data/scen_0001-0200.csv')
-df2 = pd.read_csv('../data-x-li-data//scen_0201-0500.csv')
-df3 = pd.read_csv('../data-x-li-data//scen_0501-0700.csv')
-df4 = pd.read_csv('../data-x-li-data//scen_0701-1000.csv')
-df5 = pd.read_csv('../data-x-li-data//scen_1001-1300.csv')
-df6 = pd.read_csv('../data-x-li-data//scen_1301-1600.csv')
-df7 = pd.read_csv('../data-x-li-data//scen_1601-1900.csv')
-df8 = pd.read_csv('../data-x-li-data//scen_1901-2236.csv')
+df2 = pd.read_csv('../data-x-li-data/scen_0201-0500.csv')
+df3 = pd.read_csv('../data-x-li-data/scen_0501-0700.csv')
+df4 = pd.read_csv('../data-x-li-data/scen_0701-1000.csv')
+df5 = pd.read_csv('../data-x-li-data/scen_1001-1300.csv')
+df6 = pd.read_csv('../data-x-li-data/scen_1301-1600.csv')
+df7 = pd.read_csv('../data-x-li-data/scen_1601-1900.csv')
+df8 = pd.read_csv('../data-x-li-data/scen_1901-2236.csv')
 
 #making sample from them 
 df_final = pd.DataFrame()
