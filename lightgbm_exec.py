@@ -1,4 +1,3 @@
-
 import pandas as pd 
 import numpy as np
 from statistics import mean
@@ -6,28 +5,27 @@ import math
 from datetime import datetime
 import statistics as st
 import datetime
+import time
 import pickle
-
+import random
+import lightgbm as lgb
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import make_scorer
+from sklearn.model_selection import train_test_split
 
 #Load the file containing variables [X_train, y_train, X_test, y_test]
 import pickle
-with open(r"../data-x-li-data/df_merged_train_test.pickle", "rb") as input_file:
+with open(r"../data-x-li-data/df_merged_train_test_05p.pickle", "rb") as input_file:
     X_train, y_train, X_test, y_test = pickle.load(input_file)
 
 
 #%reset -f
 SEED = 333
 
-
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import make_scorer
-
 def mean_absolute_percentage_error(y_true, y_pred): 
     return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
 
 mape_scorer = make_scorer(mean_absolute_percentage_error, greater_is_better=False)
-
-import lightgbm as lgb #pip3 install lightbm
 
 
 # Instantiate a lgb.LGBMRegressor
@@ -52,8 +50,6 @@ print(MAPE_test0)
 # Split the dataset into training_validation and testing part
 # 95 : 5 
 
-from sklearn.model_selection import train_test_split
-
 validation_ratio = 0.05
 
 X_train_valid, X_test_valid, y_train_valid, y_test_valid = train_test_split( 
@@ -74,8 +70,6 @@ LEARNING_RATE_COEF_MAX = -0.5
 MIN_DATA_IN_LEAF_MIN = 20
 MIN_DATA_IN_LEAF_MAX = 20
 LEARNING_RATE_EXPL = 0 # keep 0 here, otherwise LEARNING_RATE_COEF will be omitted
-
-import random
 
 SEED = 333
 
@@ -105,8 +99,6 @@ def fit_regressor(X_train, y_train, X_test, y_test, params):
     MAPE_test0 = mean_absolute_percentage_error(y_test, y_pred0)
     return MAPE_test0, str(tuple(lgbm0.feature_importances_)), lgbm
 
-
-import time
 
 # fit regressor and compute MAPE for each param vector
 tic = time.perf_counter() #begin timing
@@ -182,4 +174,3 @@ print(FIMP_list[best_fit_no])
 #         'MAPE_TRAIN_SET' : MAPE_train_set
 #     }
 # )
-
