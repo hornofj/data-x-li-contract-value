@@ -1,38 +1,40 @@
-import pandas as pd 
-import numpy as np
-from statistics import mean
-import math
-from datetime import datetime
-import statistics as st
-import datetime
-import time
+import xgboost as xgb
 import pickle
-import random
-import lightgbm as lgb
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import make_scorer
-from sklearn.model_selection import train_test_split
+import numpy as np
+import time
 
-#Load the file containing variables [X_train, y_train, X_test, y_test]
+#import pandas as pd 
+#from statistics import mean
+#import math
+#from datetime import datetime
+#import statistics as st
+#import datetime
+#import random
+#from sklearn.metrics import mean_squared_error
+#from sklearn.metrics import make_scorer
+#from sklearn.model_selection import train_test_split
+
+
+# Load data from pickle
 with open(r"../data-x-li-data/df_merged_train_test_05p.pickle", "rb") as input_file:
     X_train, y_train, X_test, y_test = pickle.load(input_file)
 
+# Instantiate a xgb.XGBRegressor 
+gbm0 = xgb.XGBRegressor(n_estimators = 50, learning_rate = 0.1, objective='reg:squarederror', seed = SEED)
 
-#%reset -f
-SEED = 333
-
-def mean_absolute_percentage_error(y_true, y_pred): 
-    return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
-
-
-# Instantiate a lgb.LGBMRegressor
-lgbm0 = lgb.LGBMRegressor(seed=SEED)
-
-#Fit with SciKit
-lgbm0.fit(X_train, y_train)
+# Fit XGBoost with SciKit
+gbm0.fit(X_train, y_train)
 
 # Predict the test set labels 'y_pred0'
-y_pred0 = lgbm0.predict(X_test)
+y_pred0 = gbm0.predict(X_test)
+
+# Evaluate the test set RMSE
+#rmse_test0 = mean_squared_error(y_test, y_pred0, squared=False)
+#print(rmse_test0)
+
+# Evaluate using MAPE
+def mean_absolute_percentage_error(y_true, y_pred): 
+    return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
 
 # Evaluate the test set RMSE
 MAPE_test0 = mean_absolute_percentage_error(y_test, y_pred0)
@@ -59,13 +61,13 @@ X_train_valid, X_test_valid, y_train_valid, y_test_valid = train_test_split(
 # initial ranges
 GRID_SIZE = 2
 N_ESTIMATORS_MIN = 200
-N_ESTIMATORS_MAX = 900
-MAX_DEPTH_MIN = 3
-MAX_DEPTH_MAX = 8
+N_ESTIMATORS_MAX = 2000
+MAX_DEPTH_MIN = 5
+MAX_DEPTH_MAX = 20
 LEARNING_RATE_COEF_MIN = -3
 LEARNING_RATE_COEF_MAX = -0.5
 MIN_DATA_IN_LEAF_MIN = 20
-MIN_DATA_IN_LEAF_MAX = 20
+MIN_DATA_IN_LEAF_MAX = 200
 LEARNING_RATE_EXPL = 0 # keep 0 here, otherwise LEARNING_RATE_COEF will be omitted
 
 SEED = 333
@@ -137,37 +139,3 @@ MAPE_train_set = mean_absolute_percentage_error(y_train_valid, y_pred)
 print(low_MAPE)
 print(best_params)
 print(FIMP_list[best_fit_no])
-
-
-#send performance metrics to a google sheet,
-#can be viewed at https://docs.google.com/spreadsheets/d/e/2PACX-1vSYyv4pRN7Q2EgDaGY7UGwpHCe6oN7fE3d951zaVKyi_Fh1S6gCGY9IY9dbQL4HqdW0wW3gGfGrGpLN/pubhtml 
-#name to be filled in
-
-# NAME = '____' # jmeno vyplnte sem
-
-# import requests, datetime, json
-# requests.post(
-#     "https://sheet.best/api/sheets/6a3a81b3-be98-409b-9d40-8de4e0b3ee26",
-#     json={
-#        'Name': NAME,
-#         'TEST': 'VECTOR',
-#         'RMSE': 'N/A',
-#         'DATETIME': datetime.datetime.now().isoformat(),
-#         'SEED': 'inactive',
-#         'RATIO': 'N/A',
-#         'PARAM_GRID': 'N/A',
-#         'R2SCORE': 'N/A',
-#         'BEST_PARAMS': json.dumps(best_params, indent=0),
-#         'TIME_FIT': time_fit_cv,
-#         'LOW_RMSE': 'N/A',
-#         'MAPESCORE': low_MAPE,
-#         'N_ROWS_TRAIN': train_size,
-#         'GRID_SIZE': GRID_SIZE,
-#         'COLUMNS': columns,
-#         'FEATURE_IMPORTANCES': fimp,
-#         'MAPE_TEST_SET' : MAPE_test_set,
-#         '2_ND_BEST_MAPE' : sec_best_MAPE,
-#         '2_ND_BEST_PARAMS' : json.dumps(sec_best_params, indent=0),
-#         'MAPE_TRAIN_SET' : MAPE_train_set
-#     }
-# )

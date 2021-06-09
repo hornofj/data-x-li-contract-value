@@ -14,7 +14,7 @@ from sklearn.metrics import make_scorer
 from sklearn.model_selection import train_test_split
 
 #Load the file containing variables [X_train, y_train, X_test, y_test]
-with open(r"../data-x-li-data/df_merged_train_test_05p.pickle", "rb") as input_file:
+with open(r"../data-x-li-data/df_merged_train_test_10p.pickle", "rb") as input_file:
     X_train, y_train, X_test, y_test = pickle.load(input_file)
 
 
@@ -24,11 +24,13 @@ SEED = 333
 def mean_absolute_percentage_error(y_true, y_pred): 
     return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
 
+mape_scorer = make_scorer(mean_absolute_percentage_error, greater_is_better=False)
+
 
 # Instantiate a lgb.LGBMRegressor
 lgbm0 = lgb.LGBMRegressor(seed=SEED)
 
-#Fit with SciKit
+# Fit with SciKit
 lgbm0.fit(X_train, y_train)
 
 # Predict the test set labels 'y_pred0'
@@ -57,15 +59,15 @@ X_train_valid, X_test_valid, y_train_valid, y_test_valid = train_test_split(
 
 # Setup params grid
 # initial ranges
-GRID_SIZE = 2
+GRID_SIZE = 5
 N_ESTIMATORS_MIN = 200
-N_ESTIMATORS_MAX = 900
-MAX_DEPTH_MIN = 3
-MAX_DEPTH_MAX = 8
+N_ESTIMATORS_MAX = 2000
+MAX_DEPTH_MIN = 5
+MAX_DEPTH_MAX = 20
 LEARNING_RATE_COEF_MIN = -3
 LEARNING_RATE_COEF_MAX = -0.5
 MIN_DATA_IN_LEAF_MIN = 20
-MIN_DATA_IN_LEAF_MAX = 20
+MIN_DATA_IN_LEAF_MAX = 100
 LEARNING_RATE_EXPL = 0 # keep 0 here, otherwise LEARNING_RATE_COEF will be omitted
 
 SEED = 333
