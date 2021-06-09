@@ -55,12 +55,12 @@ def df_generate_sample(fr_size, f_name):
     for i in range(1,37):
         df_final  = pd.concat([df_final, eval('df'+str(i)).sample(frac=fr_size, replace = False, random_state = np.random.RandomState())])
     print(f_name, len(df_final))
-    df_final.to_csv(f_name)
+    #df_final.to_csv(f_name)  # uncomment for CSV dump
     return df_final
 
 df_final05 = df_generate_sample(0.05, '../data-x-li-data/scen_sample_05p.csv')
 df_final10 = df_generate_sample(0.1, '../data-x-li-data/scen_sample_10p.csv')
-df_final20 = df_generate_sample(0.2, '../data-x-li-data/scen_sample_20p.csv')
+#df_final20 = df_generate_sample(0.2, '../data-x-li-data/scen_sample_20p.csv')
 
 
 # load ir 
@@ -106,12 +106,12 @@ def df_merge_nss(df, f_name):
     df_merged.head()
 
     print(f_name, len(df_merged))
-    df_merged.to_csv(f_name)
+    #df_merged.to_csv(f_name)  # uncomment for CSV dump
     return df_merged, target
 
 df_merged05, target05 = df_merge_nss(df_final05, '../data-x-li-data/scen_sample_05p_nss.csv')
 df_merged10, target10 = df_merge_nss(df_final10, '../data-x-li-data/scen_sample_10p_nss.csv')
-df_merged20, target20 = df_merge_nss(df_final20, '../data-x-li-data/scen_sample_20p_nss.csv')
+#df_merged20, target20 = df_merge_nss(df_final20, '../data-x-li-data/scen_sample_20p_nss.csv')
 
 
 def df_split_to_pickle(df, target, f_name_s):
@@ -130,4 +130,4 @@ def df_split_to_pickle(df, target, f_name_s):
 
 df_split_to_pickle(df_merged05, target05, '05p')
 df_split_to_pickle(df_merged10, target10, '10p')
-df_split_to_pickle(df_merged20, target20, '20p')
+#df_split_to_pickle(df_merged20, target20, '20p')
