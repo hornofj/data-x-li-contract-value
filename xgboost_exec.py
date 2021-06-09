@@ -41,9 +41,18 @@ MAPE_test0 = mean_absolute_percentage_error(y_test, y_pred0)
 print(MAPE_test0)
 
 
-#################################
-##### Stepwise Optimization #####
-#################################
+##########################
+#### Grid optimization ###
+##########################
+
+# Setup params grid
+param_grid = {'learning_rate': [0.01, 0.1, 0.5], # alias eta, Step size shrinkage used in update to prevents overfitting.  
+    'n_estimators': [20, 50, 100],
+    'subsample': [0.5, 0.8, 1], # Subsample ratio of the training instances
+    'max_depth': [3, 5, 10],
+    'colsample_bytree': [0.5, 1] # colsample_bytree is the subsample ratio of columns when constructing each tree. Subsampling occurs once for every tree constructed.
+    }
+
 
 
 # Split the dataset into training_validation and testing part
