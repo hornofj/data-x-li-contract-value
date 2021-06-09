@@ -129,3 +129,5 @@ def df_split_to_pickle(df, target, f_name_s):
         pickle.dump([X_train, y_train, X_test, y_test], output_file)
 
 df_split_to_pickle(df_merged05, target05, '05p')
+df_split_to_pickle(df_merged10, target10, '10p')
+df_split_to_pickle(df_merged20, target20, '20p')
