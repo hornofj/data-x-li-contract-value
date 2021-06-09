@@ -14,7 +14,7 @@ from sklearn.metrics import make_scorer
 from sklearn.model_selection import train_test_split
 
 #Load the file containing variables [X_train, y_train, X_test, y_test]
-with open(r"../data-x-li-data/df_merged_train_test_01p.pickle", "rb") as input_file:
+with open(r"../data-x-li-data/df_merged_train_test_005p.pickle", "rb") as input_file:
     X_train, y_train, X_test, y_test = pickle.load(input_file)
 
 #%reset -f
@@ -25,9 +25,9 @@ def mean_absolute_percentage_error(y_true, y_pred):
 
 # Instantiate a lgb.LGBMRegressor
 #lgbm0 = lgb.LGBMRegressor(seed=SEED)
-lgbm0 = lgb.LGBMRegressor(n_estimators = 20000, max_depth = 8, learning_rate = 0.283, min_date_leaf = 20, seed=SEED)
+lgbm0 = lgb.LGBMRegressor(n_estimators = 20000, max_depth = 8, learning_rate = 0.283, min_data_in_leaf = 20, seed=SEED)
 
-#Fit with SciKit
+# Fit with SciKit
 print(datetime.datetime.now())
 lgbm0.fit(X_train, y_train)
 print(datetime.datetime.now())
