@@ -14,9 +14,8 @@ from sklearn.metrics import make_scorer
 from sklearn.model_selection import train_test_split
 
 #Load the file containing variables [X_train, y_train, X_test, y_test]
-with open(r"../data-x-li-data/df_merged_train_test_05p.pickle", "rb") as input_file:
+with open(r"../data-x-li-data/df_merged_train_test_01p.pickle", "rb") as input_file:
     X_train, y_train, X_test, y_test = pickle.load(input_file)
-
 
 #%reset -f
 SEED = 333
@@ -24,25 +23,33 @@ SEED = 333
 def mean_absolute_percentage_error(y_true, y_pred): 
     return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
 
-
 # Instantiate a lgb.LGBMRegressor
-lgbm0 = lgb.LGBMRegressor(seed=SEED)
+#lgbm0 = lgb.LGBMRegressor(seed=SEED)
+lgbm0 = lgb.LGBMRegressor(n_estimators = 20000, max_depth = 8, learning_rate = 0.283, min_date_leaf = 20, seed=SEED)
 
 #Fit with SciKit
+print(datetime.datetime.now())
 lgbm0.fit(X_train, y_train)
+print(datetime.datetime.now())
 
-# Predict the test set labels 'y_pred0'
-y_pred0 = lgbm0.predict(X_test)
+def predict_and_evaluate(x_t, y_t):
+    # Predict the test set labels 'y_pred0'
+    y_pred0 = lgbm0.predict(x_t)
+    # Evaluate the test set RMSE
+    MAPE_t0 = mean_absolute_percentage_error(y_t, y_pred0)
+    print(MAPE_t0)
+    print(datetime.datetime.now())
 
-# Evaluate the test set RMSE
-MAPE_test0 = mean_absolute_percentage_error(y_test, y_pred0)
-print(MAPE_test0)
+print(datetime.datetime.now())
+print('test MAPE:')
+predict_and_evaluate(X_test, y_test)
+print('train MAPE:')
+predict_and_evaluate(X_train, y_train)
 
 
 #################################
 ##### Stepwise Optimization #####
 #################################
-
 
 # Split the dataset into training_validation and testing part
 # 95 : 5 
@@ -57,28 +64,31 @@ X_train_valid, X_test_valid, y_train_valid, y_test_valid = train_test_split(
 
 # Setup params grid
 # initial ranges
-GRID_SIZE = 2
-N_ESTIMATORS_MIN = 200
-N_ESTIMATORS_MAX = 900
-MAX_DEPTH_MIN = 3
-MAX_DEPTH_MAX = 8
-LEARNING_RATE_COEF_MIN = -3
-LEARNING_RATE_COEF_MAX = -0.5
-MIN_DATA_IN_LEAF_MIN = 20
-MIN_DATA_IN_LEAF_MAX = 20
-LEARNING_RATE_EXPL = 0 # keep 0 here, otherwise LEARNING_RATE_COEF will be omitted
-
-SEED = 333
+#GRID_SIZE = 2
+#N_ESTIMATORS_MIN = 200
+#N_ESTIMATORS_MAX = 900
+#MAX_DEPTH_MIN = 3
+#MAX_DEPTH_MAX = 8
+#LEARNING_RATE_COEF_MIN = -3
+#LEARNING_RATE_COEF_MAX = -0.5
+#MIN_DATA_IN_LEAF_MIN = 20
+#MIN_DATA_IN_LEAF_MAX = 20
+#LEARNING_RATE_EXPL = 0 # keep 0 here, otherwise LEARNING_RATE_COEF will be omitted
 
 #random.seed(SEED) # DEACTIVATED
-grid = pd.DataFrame({
-    'n_estimators' : [random.randint(N_ESTIMATORS_MIN, N_ESTIMATORS_MAX) for x in range(GRID_SIZE)],
-    'max_depth' : [random.randint(MAX_DEPTH_MIN, MAX_DEPTH_MAX) for x in range(GRID_SIZE)],
-    'learning_rate' : np.power([10 for x in range(GRID_SIZE)], [random.uniform(LEARNING_RATE_COEF_MIN,
-     LEARNING_RATE_COEF_MAX) for x in range(GRID_SIZE)]) if LEARNING_RATE_EXPL==0 else [LEARNING_RATE_EXPL for x in range(GRID_SIZE)],
-    'min_data_in_leaf' : [random.randint(MIN_DATA_IN_LEAF_MIN, MIN_DATA_IN_LEAF_MAX) for x in range(GRID_SIZE)]
-    })
+#grid = pd.DataFrame({
+#    'n_estimators' : [random.randint(N_ESTIMATORS_MIN, N_ESTIMATORS_MAX) for x in range(GRID_SIZE)],
+#    'max_depth' : [random.randint(MAX_DEPTH_MIN, MAX_DEPTH_MAX) for x in range(GRID_SIZE)],
+#    'learning_rate' : np.power([10 for x in range(GRID_SIZE)], [random.uniform(LEARNING_RATE_COEF_MIN,
+#     LEARNING_RATE_COEF_MAX) for x in range(GRID_SIZE)]) if LEARNING_RATE_EXPL==0 else [LEARNING_RATE_EXPL for x in range(GRID_SIZE)],
+#    'min_data_in_leaf' : [random.randint(MIN_DATA_IN_LEAF_MIN, MIN_DATA_IN_LEAF_MAX) for x in range(GRID_SIZE)]
+#    })
 
+grid = pd.DataFrame({'n_estimators': [14000, 30000],
+    'max_depth': [8, 15],
+    'learning_rate': [0.15, 0.283],
+    'min_data_in_leaf': [20, 100]
+    })
 
 def fit_regressor(X_train, y_train, X_test, y_test, params):
     # Instantiate a lgb.LGBMRegressor
