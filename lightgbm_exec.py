@@ -26,6 +26,7 @@ def mean_absolute_percentage_error(y_true, y_pred):
 # Instantiate a lgb.LGBMRegressor
 #lgbm0 = lgb.LGBMRegressor(seed=SEED)
 lgbm0 = lgb.LGBMRegressor(n_estimators = 20000, max_depth = 8, learning_rate = 0.283, min_data_in_leaf = 20, seed=SEED)
+print(lgbm0)
 
 # Fit with SciKit
 print(datetime.datetime.now())
