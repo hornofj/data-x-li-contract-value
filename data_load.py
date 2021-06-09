@@ -58,8 +58,10 @@ def df_generate_sample(fr_size, f_name):
     #df_final.to_csv(f_name)  # uncomment for CSV dump
     return df_final
 
-df_final05 = df_generate_sample(0.05, '../data-x-li-data/scen_sample_05p.csv')
-df_final10 = df_generate_sample(0.1, '../data-x-li-data/scen_sample_10p.csv')
+df_final01 = df_generate_sample(0.01, '../data-x-li-data/scen_sample_01p.csv')
+df_final02 = df_generate_sample(0.02, '../data-x-li-data/scen_sample_02p.csv')
+#df_final05 = df_generate_sample(0.05, '../data-x-li-data/scen_sample_05p.csv')
+#df_final10 = df_generate_sample(0.1, '../data-x-li-data/scen_sample_10p.csv')
 #df_final20 = df_generate_sample(0.2, '../data-x-li-data/scen_sample_20p.csv')
 
 
@@ -109,8 +111,10 @@ def df_merge_nss(df, f_name):
     #df_merged.to_csv(f_name)  # uncomment for CSV dump
     return df_merged, target
 
-df_merged05, target05 = df_merge_nss(df_final05, '../data-x-li-data/scen_sample_05p_nss.csv')
-df_merged10, target10 = df_merge_nss(df_final10, '../data-x-li-data/scen_sample_10p_nss.csv')
+df_merged01, target01 = df_merge_nss(df_final01, '../data-x-li-data/scen_sample_01p_nss.csv')
+df_merged02, target02 = df_merge_nss(df_final02, '../data-x-li-data/scen_sample_02p_nss.csv')
+#df_merged05, target05 = df_merge_nss(df_final05, '../data-x-li-data/scen_sample_05p_nss.csv')
+#df_merged10, target10 = df_merge_nss(df_final10, '../data-x-li-data/scen_sample_10p_nss.csv')
 #df_merged20, target20 = df_merge_nss(df_final20, '../data-x-li-data/scen_sample_20p_nss.csv')
 
 
@@ -128,6 +132,8 @@ def df_split_to_pickle(df, target, f_name_s):
     with open(r"../data-x-li-data/df_merged_train_test_"+f_name_s+".pickle", "wb") as output_file:
         pickle.dump([X_train, y_train, X_test, y_test], output_file)
 
-df_split_to_pickle(df_merged05, target05, '05p')
-df_split_to_pickle(df_merged10, target10, '10p')
+df_split_to_pickle(df_merged01, target01, '01p')
+df_split_to_pickle(df_merged02, target02, '02p')
+#df_split_to_pickle(df_merged05, target05, '05p')
+#df_split_to_pickle(df_merged10, target10, '10p')
 #df_split_to_pickle(df_merged20, target20, '20p')
